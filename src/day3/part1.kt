@@ -12,21 +12,24 @@ class Line(val startPoint: Point, val endPoint: Point)
 class Point(val x: Int, val y: Int)
 
 fun constructPoints(input: Array<String>, startingPoint: Point): ArrayList<Line> {
-    var nextStartPoint = startingPoint
 
-    return input.map { newPoint ->
+    input.map { newPoint ->
 
         var newX = 0
         var newY = 0
         when (newPoint[0]) {
-            direction.LEFT.indicador -> newX = nextStartPoint.x - newPoint.substring(1).toInt()
-            direction.RIGHT.indicador -> newX = nextStartPoint.x + newPoint.substring(1).toInt()
-            direction.DOWN.indicador -> newY = nextStartPoint.y - newPoint.substring(1).toInt()
-            direction.UP.indicador -> newY = nextStartPoint.y + newPoint.substring(1).toInt()
+            direction.LEFT.indicador -> newX = startingPoint.x - newPoint.substring(1).toInt()
+            direction.RIGHT.indicador -> newX = startingPoint.x + newPoint.substring(1).toInt()
+            direction.DOWN.indicador -> newY = startingPoint.y - newPoint.substring(1).toInt()
+            direction.UP.indicador -> newY = startingPoint.y + newPoint.substring(1).toInt()
         }
+        val newArrayList = arrayListOf(Line(startingPoint, Point(newX, newY)))
 
-        Line(nextStartPoint, Point(newX, newY))
-    }.toCollection(arrayListOf())
+        newArrayList.addAll(constructPoints(input, Point(newX, newY)))
+        return newArrayList
+    }
+
+    return arrayListOf()
 }
 
 
